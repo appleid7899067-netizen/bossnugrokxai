@@ -1,26 +1,26 @@
 const flags: Record<string, boolean> = {
-  sandbox: false,
+  sandbox: true,
   createMode: true,
   deployGuard: true,
   previewRuntime: true,
-}
+};
 
 export function featureEnabled(key: string): boolean {
-  return !!flags[key]
+  return !!flags[key];
 }
 
 export function setFeature(key: string, value: boolean): void {
-  flags[key] = value
+  flags[key] = value;
 }
 
 export function listFeatures(): Record<string, boolean> {
-  return { ...flags }
+  return { ...flags };
 }
 
 export function enableCreateMode(): void {
-  setFeature('createMode', true)
+  setFeature("createMode", true);
 }
 
 export function disableCreateMode(): void {
-  setFeature('createMode', false)
+  setFeature("createMode", false);
 }
