@@ -1,0 +1,49 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: #08080d; color: #f7f4ff; }
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+button, textarea { font: inherit; }
+
+.boss-shell { min-height: 100svh; display: flex; flex-direction: column; background: radial-gradient(circle at 50% -10%, #2b1747 0, #100b18 35%, #08080d 72%); }
+.boss-header { height: 70px; flex: 0 0 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; border-bottom: 1px solid #292331; background: rgba(10, 9, 15, .78); backdrop-filter: blur(16px); }
+.brand { font-weight: 800; letter-spacing: -.03em; font-size: 19px; }
+.subtitle { color: #9c94aa; font-size: 12px; margin-top: 3px; }
+.status { display: flex; align-items: center; gap: 8px; color: #a9a1b6; font-size: 12px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #65d891; box-shadow: 0 0 12px rgba(101,216,145,.65); }
+.status.working .dot { background: #b98cff; box-shadow: 0 0 14px rgba(185,140,255,.8); animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: .35; transform: scale(.72); } }
+
+.chat { flex: 1; width: min(920px, 100%); margin: 0 auto; padding: 30px 18px 120px; overflow: auto; }
+.empty { min-height: calc(100svh - 190px); display: grid; place-content: center; text-align: center; }
+.orb { width: 58px; height: 58px; margin: 0 auto 18px; display: grid; place-items: center; border-radius: 18px; background: linear-gradient(145deg,#a66cff,#6031a6); box-shadow: 0 12px 50px rgba(135,76,230,.3); font-size: 26px; font-weight: 900; }
+.empty h1 { margin: 0; font-size: clamp(27px, 7vw, 42px); letter-spacing: -.04em; }
+.empty p { margin: 10px auto 24px; max-width: 560px; color: #a49cad; line-height: 1.6; }
+.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.chips button { color: #ddd4e9; background: #17121e; border: 1px solid #30283a; border-radius: 999px; padding: 9px 13px; cursor: pointer; }
+.chips button:hover { border-color: #73529a; background: #1d1727; }
+
+.messages { display: flex; flex-direction: column; gap: 18px; }
+.message { display: flex; gap: 10px; align-items: flex-start; }
+.message.user { flex-direction: row-reverse; }
+.avatar { width: 30px; height: 30px; flex: 0 0 30px; display: grid; place-items: center; border-radius: 10px; background: #21192c; color: #c9b7df; font-size: 10px; font-weight: 800; }
+.message.user .avatar { background: #51317b; color: #fff; }
+.bubble { max-width: min(78%, 720px); padding: 12px 15px; border: 1px solid #292331; border-radius: 16px; background: #111016; color: #eeeaf4; white-space: pre-wrap; line-height: 1.55; }
+.message.user .bubble { background: #39225b; border-color: #5d3a83; }
+.working-line { color: #9e94ac; font-size: 12px; padding-left: 40px; }
+.working-line span { display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: #b98cff; animation: pulse 1s infinite; }
+
+.composer { position: fixed; bottom: 0; left: 0; right: 0; width: min(920px, calc(100% - 24px)); margin: 0 auto 12px; display: flex; gap: 8px; padding: 9px; border: 1px solid #332a3e; border-radius: 18px; background: rgba(16, 13, 21, .92); box-shadow: 0 20px 60px rgba(0,0,0,.35); backdrop-filter: blur(18px); }
+.composer textarea { flex: 1; resize: none; min-height: 42px; max-height: 120px; padding: 10px 11px; border: 0; outline: 0; background: transparent; color: #fff; }
+.composer textarea::placeholder { color: #756d7e; }
+.send { align-self: flex-end; min-width: 66px; height: 42px; border: 0; border-radius: 12px; background: #9a62dc; color: white; font-weight: 750; cursor: pointer; }
+.send:disabled { opacity: .4; cursor: default; }
+.privacy { position: fixed; bottom: 2px; left: 0; right: 0; text-align: center; color: #5f5966; font-size: 9px; pointer-events: none; }
+
+@media (max-width: 640px) {
+  .boss-header { padding: 0 14px; height: 62px; flex-basis: 62px; }
+  .subtitle { display: none; }
+  .chat { padding: 22px 12px 110px; }
+  .bubble { max-width: 84%; }
+  .empty { min-height: calc(100svh - 170px); }
+  .chips button { font-size: 12px; }
+  .composer { width: calc(100% - 16px); margin-bottom: 9px; border-radius: 15px; }
+}
