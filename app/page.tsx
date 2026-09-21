@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Role = "user" | "assistant" | "system";
-type ChatMessage = { role: Role; content: string };
+type ChatMessage = { role: Role; content: string; tool_call_id?: string };
 type ToolCall = { id: string; function: { name: string; arguments: string } };
 type PuterResponse = { message?: { content?: string; tool_calls?: ToolCall[] }; content?: string };
 
@@ -79,7 +79,7 @@ function runHiddenSandbox(html: string): Promise<{ ok: boolean; errors: string[]
       resolve({ ok: errors.length === 0, errors, logs });
     };
 
-    const timer = window.setTimeout(finish, 3500);
+    const timer = window.setTimeout(finish, 5000);
 
     const onMessage = (event: MessageEvent) => {
       const data = event.data;
@@ -88,7 +88,7 @@ function runHiddenSandbox(html: string): Promise<{ ok: boolean; errors: string[]
       if (data.type === "log") logs.push(String(data.message || ""));
       if (data.type === "ready") {
         window.clearTimeout(timer);
-        window.setTimeout(finish, 80);
+        window.setTimeout(finish, 500);
       }
     };
 
@@ -129,7 +129,7 @@ async function askBoss(messages: ChatMessage[], onStatus: (s: string) => void) {
     if (!toolCalls.length) return extractText(response);
 
     const assistantMessage = response.message ?? { content: "" };
-    working.push({ role: "assistant", content: JSON.stringify(assistantMessage) });
+    working.push({ role: "assistant", content: JSON.stringify(assistantMessage), ...(assistantMessage.tool_calls ? { tool_calls: assistantMessage.tool_calls } : {}) } as ChatMessage & { tool_calls?: ToolCall[] });
 
     for (const call of toolCalls) {
       if (call.function.name !== "run_sandbox") continue;
@@ -146,7 +146,7 @@ async function askBoss(messages: ChatMessage[], onStatus: (s: string) => void) {
           : "Verification failed. Repair the HTML and call run_sandbox again."
       });
 
-      working.push({ role: "user", content: `INTERNAL TOOL RESULT [${call.id}]: ${report}` });
+      working.push({ role: "tool", tool_call_id: call.id, content: report } as ChatMessage);
     }
   }
 
