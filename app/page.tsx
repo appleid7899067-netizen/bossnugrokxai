@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-type Role = "user" | "assistant" | "system";
-type ChatMessage = { role: Role; content: string; tool_call_id?: string };
+type Role = "user" | "assistant" | "system" | "tool";
+type ChatMessage = { role: Role; content: string; tool_call_id?: string; tool_calls?: ToolCall[] };
 type ToolCall = { id: string; function: { name: string; arguments: string } };
 type PuterResponse = { message?: { content?: string; tool_calls?: ToolCall[] }; content?: string };
 
@@ -129,7 +129,7 @@ async function askBoss(messages: ChatMessage[], onStatus: (s: string) => void) {
     if (!toolCalls.length) return extractText(response);
 
     const assistantMessage = response.message ?? { content: "" };
-    working.push({ role: "assistant", content: assistantMessage.content ?? "", ...(assistantMessage.tool_calls ? { tool_calls: assistantMessage.tool_calls } : {}) } as ChatMessage & { tool_calls?: ToolCall[] });
+    working.push({ role: "assistant", content: assistantMessage.content ?? "", tool_calls: assistantMessage.tool_calls ?? [] });
 
     for (const call of toolCalls) {
       if (call.function.name !== "run_sandbox") continue;
