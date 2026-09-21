@@ -129,7 +129,7 @@ async function askBoss(messages: ChatMessage[], onStatus: (s: string) => void) {
     if (!toolCalls.length) return extractText(response);
 
     const assistantMessage = response.message ?? { content: "" };
-    working.push({ role: "assistant", content: JSON.stringify(assistantMessage), ...(assistantMessage.tool_calls ? { tool_calls: assistantMessage.tool_calls } : {}) } as ChatMessage & { tool_calls?: ToolCall[] });
+    working.push({ role: "assistant", content: assistantMessage.content ?? "", ...(assistantMessage.tool_calls ? { tool_calls: assistantMessage.tool_calls } : {}) } as ChatMessage & { tool_calls?: ToolCall[] });
 
     for (const call of toolCalls) {
       if (call.function.name !== "run_sandbox") continue;
